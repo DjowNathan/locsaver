@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "97400663656",
+    "firebase_url": "https://locsaver-f7d2d.firebaseio.com",
+    "project_id": "locsaver-f7d2d",
+    "storage_bucket": "locsaver-f7d2d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97400663656:android:5a6e95001675180a2615dd",
+        "android_client_info": {
+          "package_name": "br.usjt.locsaver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "97400663656-o6fqom73unpboljjscdavvu2ac0pp0b2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFDaSgQjayrMCLFH1bZbbe6nibK1sXdb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "97400663656-o6fqom73unpboljjscdavvu2ac0pp0b2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
