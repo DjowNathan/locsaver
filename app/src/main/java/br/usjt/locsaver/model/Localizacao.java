@@ -1,4 +1,4 @@
-package br.usjt.locsaver;
+package br.usjt.locsaver.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -21,6 +21,8 @@ public class Localizacao implements Serializable {
 
         @Expose
         private Double longitude;
+
+
 
         public String getId() {
                 return id;
