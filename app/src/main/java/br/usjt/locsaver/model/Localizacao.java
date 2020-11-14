@@ -1,66 +1,58 @@
 package br.usjt.locsaver.model;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Localizacao implements Serializable {
-        @SerializedName("_id")
-        @Expose
-        private String id;
 
-        @Expose
-        private String descricao;
+        private String description;
 
-        @Expose
-        private LocalDate criadoEm;
+        private Timestamp createdAt;
 
-        @Expose
-        private Double latitude;
+        private GeoPoint coordinates;
 
-        @Expose
-        private Double longitude;
-
-
-
-        public String getId() {
-                return id;
+        public Map<String, Object> toMap(){
+                Map<String, Object> map = new HashMap<>();
+                map.put("description", this.description);
+                map.put("createdAt", this.createdAt);
+                map.put("coordinates", this.coordinates);
+                return map;
         }
 
-        public void setId(String id) {
-                this.id = id;
+        public String getDescription() {
+                return description;
         }
 
-        public String getDescricao() {
-                return descricao;
+        public void setDescription(String description) {
+                this.description = description;
         }
 
-        public void setDescricao(String descricao) {
-                this.descricao = descricao;
+        public Timestamp getCreatedAt() {
+                return createdAt;
         }
 
-        public LocalDate getCriadoEm() {
-                return criadoEm;
+        public void setCreatedAt(Timestamp createdAt) {
+                this.createdAt = createdAt;
         }
 
-        public void setCriadoEm(LocalDate criadoEm) {
-                this.criadoEm = criadoEm;
+        public GeoPoint getCoordinates() {
+                return coordinates;
         }
 
-        public Double getLatitude() {
-                return latitude;
+        public void setCoordinates(GeoPoint coordinates) {
+                this.coordinates = coordinates;
         }
 
-        public void setLatitude(Double latitude) {
-                this.latitude = latitude;
-        }
-
-        public Double getLongitude() {
-                return longitude;
-        }
-
-        public void setLongitude(Double longitude) {
-                this.longitude = longitude;
+        @Override
+        public String toString() {
+                return "Localizacao {" +
+                        "\ndescription='" + description + '\'' +
+                        ", \ncreatedAt=" + createdAt +
+                        ", \ncoordinates=" + coordinates +
+                        "}\n";
         }
 }

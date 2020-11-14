@@ -42,6 +42,7 @@
         />
     <Button
         android:id="@+id/buttonSalvar"
+        android:onClick="cadastraLocal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
