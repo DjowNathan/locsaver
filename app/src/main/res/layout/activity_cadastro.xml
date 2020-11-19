@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.CadastroActivity"
-    android:background="@drawable/background_shape"
+    android:background="@drawable/background"
     >
 
 
@@ -34,13 +34,15 @@
         app:layout_constraintTop_toBottomOf="@+id/tituloTextView"
         app:layout_constraintBottom_toTopOf="@+id/buttonSalvar"
         android:inputType="text|textMultiLine"
+        android:background="@color/white"
         android:lines="8"
         android:maxLines="10"
         android:minLines="6"
         android:scrollbars="vertical"
         android:textAlignment="center"
-        android:elevation="4dp"
-        tools:ignore="HardcodedText" />
+        android:elevation="8dp"
+        tools:ignore="HardcodedText"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/buttonSalvar"
