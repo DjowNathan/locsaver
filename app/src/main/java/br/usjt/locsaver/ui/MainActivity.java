@@ -1,6 +1,10 @@
 package br.usjt.locsaver.ui;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,12 +26,16 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import br.usjt.locsaver.R;
+import br.usjt.locsaver.helper.Permissoes;
 import br.usjt.locsaver.model.Localizacao;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView localizacaoRecyclerView;
     private FirebaseFirestore db;
     private FirestoreRecyclerAdapter<Localizacao, LocalizacaoViewHolder> adapter;
+    private String[] permissoes = new String[]{
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         localizacaoRecyclerView = findViewById(R.id.localizacaoRecyclerView);
+
+        //Validar Permissoes
+        Permissoes.validarPermissoes(permissoes, this, 1);
 
 
         Query query = db.collection("locais").orderBy("createdAt");
@@ -101,7 +112,34 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, CadastroActivity.class));
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        for (int permissaoResultado : grantResults) {
+            if (permissaoResultado == PackageManager.PERMISSION_DENIED) {
+                alertaValidacaoPermissao();
+            }
+        }
+    }
+
+    private void alertaValidacaoPermissao(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Permissões Negadas");
+        builder.setMessage("Para utilizar o app é necessário aceitar as permissões");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
 
     private class LocalizacaoViewHolder extends RecyclerView.ViewHolder {
 

@@ -43,8 +43,8 @@ public class Localizacao implements Serializable {
                 return coordinates;
         }
 
-        public void setCoordinates(GeoPoint coordinates) {
-                this.coordinates = coordinates;
+        public void setCoordinates(double latitude, double longitude) {
+                this.coordinates = new GeoPoint(latitude, longitude);
         }
 
         @Override
