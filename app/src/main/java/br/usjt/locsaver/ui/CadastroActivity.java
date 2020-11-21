@@ -36,6 +36,7 @@ public class CadastroActivity extends AppCompatActivity {
         
         db = FirebaseFirestore.getInstance();
         descricao = findViewById(R.id.editTextDescricao);
+        recuperarLocalizacaoUsuario();
 
     }
     
