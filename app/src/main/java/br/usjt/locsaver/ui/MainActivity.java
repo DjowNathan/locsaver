@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
                 holder.textViewDescricao.setText(localizacao.getDescription());
                 holder.textViewDataCriacao.setText(
-                        new SimpleDateFormat("dd/MM/yyyy hh:mm",localeBrazil).format(localizacao.getCreatedAt().toDate())
+                        new SimpleDateFormat("dd/MM/yyyy HH:mm",localeBrazil).format(localizacao.getCreatedAt().toDate())
                 );
                 holder.textViewLatitude.setText(
                         String.format(

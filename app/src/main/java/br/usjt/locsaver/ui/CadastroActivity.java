@@ -44,8 +44,6 @@ public class CadastroActivity extends AppCompatActivity {
         Localizacao localizacao = new Localizacao();
         localizacao.setDescription(descricao.getText().toString());
         localizacao.setCreatedAt(Timestamp.now());
-        // TODO: set longitude, set latitude
-
         localizacao.setCoordinates(latitude, longitude);
 
         db.collection("locais")
