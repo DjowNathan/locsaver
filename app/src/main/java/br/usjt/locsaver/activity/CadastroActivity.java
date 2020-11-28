@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import br.usjt.locsaver.config.ConfiguracoesFirebase;
-import br.usjt.locsaver.helper.UsuarioFirebase;
 import br.usjt.locsaver.model.Usuario;
 
 public class CadastroActivity extends AppCompatActivity {
