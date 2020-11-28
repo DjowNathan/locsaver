@@ -1,4 +1,9 @@
-package br.usjt.locsaver.ui;
+package br.usjt.locsaver.activity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -12,11 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,18 +29,21 @@ import br.usjt.locsaver.R;
 import br.usjt.locsaver.helper.Permissoes;
 import br.usjt.locsaver.model.Localizacao;
 
-public class MainActivity extends AppCompatActivity {
+import static br.usjt.locsaver.helper.UsuarioFirebase.getIdentificadorUsuario;
+
+public class LocalizacoesActivity extends AppCompatActivity {
     private RecyclerView localizacaoRecyclerView;
     private FirebaseFirestore db;
-    private FirestoreRecyclerAdapter<Localizacao, LocalizacaoViewHolder> adapter;
+    private FirestoreRecyclerAdapter<Localizacao, LocalizacoesActivity.LocalizacaoViewHolder> adapter;
     private String[] permissoes = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_localizacoes);
 
         db = FirebaseFirestore.getInstance();
         localizacaoRecyclerView = findViewById(R.id.localizacaoRecyclerView);
@@ -49,24 +52,44 @@ public class MainActivity extends AppCompatActivity {
         Permissoes.validarPermissoes(permissoes, this, 1);
 
         Query query = db.collection("locais").orderBy("createdAt");
+
         FirestoreRecyclerOptions<Localizacao> options = new FirestoreRecyclerOptions.Builder<Localizacao>()
                 .setQuery(query, Localizacao.class)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<Localizacao, LocalizacaoViewHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<Localizacao, LocalizacoesActivity.LocalizacaoViewHolder>(options) {
             @NonNull
             @Override
-            public LocalizacaoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            public LocalizacoesActivity.LocalizacaoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_localizacao, parent, false);
-                return new LocalizacaoViewHolder(view);
+                return new LocalizacoesActivity.LocalizacaoViewHolder(view);
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull LocalizacaoViewHolder holder, int position, @NonNull Localizacao localizacao) {
+            protected void onBindViewHolder(@NonNull LocalizacoesActivity.LocalizacaoViewHolder holder,
+                                            int position, @NonNull Localizacao localizacao) {
                 Locale localeBrazil = new Locale("pt","BR");
 
                 Log.d("FIRESTORE", localizacao.toString());
+
+                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+
+
+                        db.collection("usuarios")
+                                .document(getIdentificadorUsuario())
+                                .collection("locais")
+                                .document(localizacao.getId())
+                                .delete()
+                                .addOnSuccessListener(aVoid -> Log.d("FIRESTORE", "Localização Deletada!"))
+                                .addOnFailureListener(e -> Log.w("FIRESTORE", "Erro ao Deletado", e));
+
+                        return true;
+
+                    }
+                });
 
                 holder.textViewDescricao.setText(localizacao.getDescription());
                 holder.textViewDataCriacao.setText(
@@ -108,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void novaLocalizacao(View view){
-        startActivity(new Intent(this, CadastroActivity.class));
+        startActivity(new Intent(this, AddLocalActivity.class));
     }
 
     @Override
@@ -140,6 +163,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
+
     private class LocalizacaoViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textViewDescricao, textViewLatitude, textViewDataCriacao, textViewLongitude;
@@ -153,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
             textViewLatitude = itemView.findViewById(R.id.textViewLatitude);
 
         }
+
     }
 }
 

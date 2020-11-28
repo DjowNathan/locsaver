@@ -1,4 +1,4 @@
-package br.usjt.locsaver.ui;
+package br.usjt.locsaver.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +21,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import br.usjt.locsaver.R;
 import br.usjt.locsaver.model.Localizacao;
 
-public class CadastroActivity extends AppCompatActivity {
+import static br.usjt.locsaver.helper.UsuarioFirebase.getIdentificadorUsuario;
+
+public class AddLocalActivity extends AppCompatActivity {
 
     private EditText descricao;
     private FirebaseFirestore db;
@@ -32,7 +34,7 @@ public class CadastroActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cadastro);
+        setContentView(R.layout.activity_addlocal);
         
         db = FirebaseFirestore.getInstance();
         descricao = findViewById(R.id.editTextDescricao);
@@ -48,7 +50,9 @@ public class CadastroActivity extends AppCompatActivity {
 
         localizacao.setCoordinates(latitude, longitude);
 
-        db.collection("locais")
+        db.collection("usuarios")
+                .document(getIdentificadorUsuario())
+                .collection("locais")
                 .add(localizacao.toMap())
                 .addOnSuccessListener(documentReference -> Log.d("FIRESTORE", "DocumentSnapshot added with ID: " + documentReference.getId()))
                 .addOnFailureListener(e -> Log.w("FIRESTORE", "Error adding document", e));

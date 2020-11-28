@@ -15,12 +15,27 @@ public class Localizacao implements Serializable {
 
         private GeoPoint coordinates;
 
+        private String id;
+
         public Map<String, Object> toMap(){
                 Map<String, Object> map = new HashMap<>();
                 map.put("description", this.description);
                 map.put("createdAt", this.createdAt);
                 map.put("coordinates", this.coordinates);
+
+                if(!this.id.isEmpty()){
+                        map.put("id", this.id);
+                }
+
                 return map;
+        }
+
+        public String getId() {
+                return id;
+        }
+
+        public void setId(String id) {
+                this.id = id;
         }
 
         public String getDescription() {
