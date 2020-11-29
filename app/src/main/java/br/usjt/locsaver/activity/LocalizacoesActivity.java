@@ -1,25 +1,23 @@
 package br.usjt.locsaver.activity;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.text.SimpleDateFormat;
@@ -28,15 +26,13 @@ import java.util.Locale;
 import br.usjt.locsaver.R;
 import br.usjt.locsaver.helper.Permissoes;
 import br.usjt.locsaver.model.Localizacao;
-
-import static br.usjt.locsaver.helper.UsuarioFirebase.getIdentificadorUsuario;
+import br.usjt.locsaver.service.LocalizacaoService;
 
 public class LocalizacoesActivity extends AppCompatActivity {
     private final String TAG = "FIREBASE";
-    private RecyclerView localizacaoRecyclerView;
-    private FirebaseFirestore db;
+    private LocalizacaoService localizacaoService;
     private FirestoreRecyclerAdapter<Localizacao, LocalizacoesActivity.LocalizacaoViewHolder> adapter;
-    private String[] permissoes = new String[]{
+    private final String[] permissoes = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION
     };
 
@@ -46,16 +42,13 @@ public class LocalizacoesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_localizacoes);
 
-        db = FirebaseFirestore.getInstance();
-        localizacaoRecyclerView = findViewById(R.id.localizacaoRecyclerView);
+        localizacaoService = LocalizacaoService.getInstance();
+        RecyclerView localizacaoRecyclerView = findViewById(R.id.localizacaoRecyclerView);
 
         //Validar Permissoes
         Permissoes.validarPermissoes(permissoes, this, 1);
 
-        Query query = db.collection("usuarios")
-                        .document(getIdentificadorUsuario())
-                        .collection("locais")
-                        .orderBy("createdAt");
+        Query query = localizacaoService.getListaLocaisDoUsuario();
 
         FirestoreRecyclerOptions<Localizacao> options = new FirestoreRecyclerOptions.Builder<Localizacao>()
                 .setQuery(query, Localizacao.class)
@@ -67,7 +60,7 @@ public class LocalizacoesActivity extends AppCompatActivity {
             public LocalizacoesActivity.LocalizacaoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_localizacao, parent, false);
-                return new LocalizacoesActivity.LocalizacaoViewHolder(view);
+                return new LocalizacaoViewHolder(view);
             }
 
             @Override
@@ -77,13 +70,8 @@ public class LocalizacoesActivity extends AppCompatActivity {
 
                 holder.itemView.setOnLongClickListener(v -> {
 
-                    db.collection("usuarios")
-                            .document(getIdentificadorUsuario())
-                            .collection("locais")
-                            .document(localizacao.getId())
-                            .delete()
-                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Localização Deletada!"))
-                            .addOnFailureListener(e -> Log.w(TAG, "Erro ao Deletado", e));
+                    localizacaoService.deletaLocal(localizacao.getId());
+                    Toast.makeText(LocalizacoesActivity.this, "Local deletado com sucesso", Toast.LENGTH_SHORT).show();
 
                     return true;
 
@@ -156,9 +144,9 @@ public class LocalizacoesActivity extends AppCompatActivity {
 
     }
 
-    private class LocalizacaoViewHolder extends RecyclerView.ViewHolder {
+    private static class LocalizacaoViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView textViewDescricao, textViewLatitude, textViewDataCriacao, textViewLongitude;
+        private final TextView textViewDescricao, textViewLatitude, textViewDataCriacao, textViewLongitude;
 
         public LocalizacaoViewHolder(@NonNull View itemView) {
             super(itemView);
