@@ -51,7 +51,10 @@ public class LocalizacoesActivity extends AppCompatActivity {
         //Validar Permissoes
         Permissoes.validarPermissoes(permissoes, this, 1);
 
-        Query query = db.collection("locais").orderBy("createdAt");
+        Query query = db.collection("usuarios")
+                        .document(getIdentificadorUsuario())
+                        .collection("locais")
+                        .orderBy("createdAt");
 
         FirestoreRecyclerOptions<Localizacao> options = new FirestoreRecyclerOptions.Builder<Localizacao>()
                 .setQuery(query, Localizacao.class)
