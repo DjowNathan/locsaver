@@ -28,8 +28,6 @@ public class AddLocalActivity extends AppCompatActivity {
     private final String TAG = "FIREBASE";
     private EditText descricao;
     private FirebaseFirestore db;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
     private double latitude, longitude;
     
     @Override
@@ -52,36 +50,21 @@ public class AddLocalActivity extends AppCompatActivity {
         db.collection("usuarios")
                 .document(getIdentificadorUsuario())
                 .collection("locais")
-                .add(localizacao.toMap())
+                .add(localizacao)
                 .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()))
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, LocalizacoesActivity.class));
     }
 
     private void recuperarLocalizacaoUsuario() {
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                //recuperar latitude e longitude
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
+        LocationListener locationListener = location -> {
 
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
 
-            }
-
-
-            @Override
-            public void onProviderEnabled(@NonNull String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(@NonNull String provider) {
-
-            }
         };
 
         //Solicitar atualização de localização
@@ -96,10 +79,10 @@ public class AddLocalActivity extends AppCompatActivity {
             return;
         }
         locationManager.requestLocationUpdates(
-                locationManager.GPS_PROVIDER,
+                LocationManager.GPS_PROVIDER,
                 10000,
                 10,
                 locationListener);
 
-    };
+    }
 }

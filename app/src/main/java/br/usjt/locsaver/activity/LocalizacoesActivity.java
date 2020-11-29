@@ -75,24 +75,18 @@ public class LocalizacoesActivity extends AppCompatActivity {
                                             int position, @NonNull Localizacao localizacao) {
                 Locale localeBrazil = new Locale("pt","BR");
 
-                Log.d(TAG, localizacao.toString());
+                holder.itemView.setOnLongClickListener(v -> {
 
-                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
+                    db.collection("usuarios")
+                            .document(getIdentificadorUsuario())
+                            .collection("locais")
+                            .document(localizacao.getId())
+                            .delete()
+                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Localização Deletada!"))
+                            .addOnFailureListener(e -> Log.w(TAG, "Erro ao Deletado", e));
 
+                    return true;
 
-                        db.collection("usuarios")
-                                .document(getIdentificadorUsuario())
-                                .collection("locais")
-                                .document(localizacao.getId())
-                                .delete()
-                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Localização Deletada!"))
-                                .addOnFailureListener(e -> Log.w(TAG, "Erro ao Deletado", e));
-
-                        return true;
-
-                    }
                 });
 
                 holder.textViewDescricao.setText(localizacao.getDescription());
@@ -155,20 +149,12 @@ public class LocalizacoesActivity extends AppCompatActivity {
         builder.setTitle("Permissões Negadas");
         builder.setMessage("Para utilizar o app é necessário aceitar as permissões");
         builder.setCancelable(false);
-        builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
+        builder.setPositiveButton("Confirmar", (dialog, which) -> finish());
 
         AlertDialog dialog = builder.create();
         dialog.show();
 
     }
-
-
-
 
     private class LocalizacaoViewHolder extends RecyclerView.ViewHolder {
 

@@ -2,11 +2,14 @@ package br.usjt.locsaver.model;
 
 import android.util.Log;
 
+import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Usuario {
+    private final String TAG = "FIREBASE";
 
+    @DocumentId
     private String id;
     private String nome;
     private String email;
@@ -16,11 +19,12 @@ public class Usuario {
     public Usuario() {}
 
     public void Salvar(){
-        FirebaseFirestore firebaseRef = FirebaseFirestore.getInstance();
-        firebaseRef.collection("usuarios")
-                .add(this)
-                .addOnSuccessListener(documentReference -> Log.d("FIRESTORE", "DocumentSnapshot added with ID: " + documentReference.getId()))
-                .addOnFailureListener(e -> Log.w("FIRESTORE", "Error adding document", e));
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("usuarios")
+                .document(this.id)
+                .set(this)
+                .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + this.id))
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
 
