@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import br.usjt.locsaver.R;
-import br.usjt.locsaver.config.ConfiguracoesFirebase;
 import br.usjt.locsaver.helper.Permissoes;
 import br.usjt.locsaver.helper.UsuarioFirebase;
 
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         Permissoes.validarPermissoes(permissoes, this, 1);
 
 
-        autenticacao = ConfiguracoesFirebase.getFirebaseAutenticacao();
+        autenticacao = FirebaseAuth.getInstance();
         autenticacao.signOut();
     }
 

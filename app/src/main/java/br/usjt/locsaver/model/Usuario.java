@@ -5,21 +5,18 @@ import android.util.Log;
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import br.usjt.locsaver.config.ConfiguracoesFirebase;
-
 public class Usuario {
+
     private String id;
     private String nome;
     private String email;
     private String senha;
 
 
-    public Usuario() {
-
-    }
+    public Usuario() {}
 
     public void Salvar(){
-        FirebaseFirestore firebaseRef = ConfiguracoesFirebase.getDatabase();
+        FirebaseFirestore firebaseRef = FirebaseFirestore.getInstance();
         firebaseRef.collection("usuarios")
                 .add(this)
                 .addOnSuccessListener(documentReference -> Log.d("FIRESTORE", "DocumentSnapshot added with ID: " + documentReference.getId()))

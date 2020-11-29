@@ -25,6 +25,7 @@ import static br.usjt.locsaver.helper.UsuarioFirebase.getIdentificadorUsuario;
 
 public class AddLocalActivity extends AppCompatActivity {
 
+    private final String TAG = "FIREBASE";
     private EditText descricao;
     private FirebaseFirestore db;
     private LocationManager locationManager;
@@ -46,16 +47,14 @@ public class AddLocalActivity extends AppCompatActivity {
         Localizacao localizacao = new Localizacao();
         localizacao.setDescription(descricao.getText().toString());
         localizacao.setCreatedAt(Timestamp.now());
-        // TODO: set longitude, set latitude
-
         localizacao.setCoordinates(latitude, longitude);
 
         db.collection("usuarios")
                 .document(getIdentificadorUsuario())
                 .collection("locais")
                 .add(localizacao.toMap())
-                .addOnSuccessListener(documentReference -> Log.d("FIRESTORE", "DocumentSnapshot added with ID: " + documentReference.getId()))
-                .addOnFailureListener(e -> Log.w("FIRESTORE", "Error adding document", e));
+                .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()))
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
         startActivity(new Intent(this, MainActivity.class));
     }

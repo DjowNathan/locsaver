@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
-import br.usjt.locsaver.config.ConfiguracoesFirebase;
 import br.usjt.locsaver.model.Usuario;
 
 public class CadastroActivity extends AppCompatActivity {
@@ -75,7 +74,7 @@ public class CadastroActivity extends AppCompatActivity {
 
     public void cadastrarUsuario( Usuario usuario ){
 
-        autenticacao = ConfiguracoesFirebase.getFirebaseAutenticacao();
+        autenticacao = FirebaseAuth.getInstance();
         autenticacao.createUserWithEmailAndPassword(
                 usuario.getEmail(),
                 usuario.getSenha()

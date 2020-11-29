@@ -32,6 +32,7 @@ import br.usjt.locsaver.model.Localizacao;
 import static br.usjt.locsaver.helper.UsuarioFirebase.getIdentificadorUsuario;
 
 public class LocalizacoesActivity extends AppCompatActivity {
+    private final String TAG = "FIREBASE";
     private RecyclerView localizacaoRecyclerView;
     private FirebaseFirestore db;
     private FirestoreRecyclerAdapter<Localizacao, LocalizacoesActivity.LocalizacaoViewHolder> adapter;
@@ -74,7 +75,7 @@ public class LocalizacoesActivity extends AppCompatActivity {
                                             int position, @NonNull Localizacao localizacao) {
                 Locale localeBrazil = new Locale("pt","BR");
 
-                Log.d("FIRESTORE", localizacao.toString());
+                Log.d(TAG, localizacao.toString());
 
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
@@ -86,8 +87,8 @@ public class LocalizacoesActivity extends AppCompatActivity {
                                 .collection("locais")
                                 .document(localizacao.getId())
                                 .delete()
-                                .addOnSuccessListener(aVoid -> Log.d("FIRESTORE", "Localização Deletada!"))
-                                .addOnFailureListener(e -> Log.w("FIRESTORE", "Erro ao Deletado", e));
+                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Localização Deletada!"))
+                                .addOnFailureListener(e -> Log.w(TAG, "Erro ao Deletado", e));
 
                         return true;
 

@@ -9,23 +9,23 @@ import java.util.Map;
 
 public class Localizacao implements Serializable {
 
+        private String id;
+
         private String description;
 
         private Timestamp createdAt;
 
         private GeoPoint coordinates;
 
-        private String id;
-
         public Map<String, Object> toMap(){
                 Map<String, Object> map = new HashMap<>();
+
+                if(!this.id.isEmpty() && this.id != null)
+                        map.put("id", this.id);
+
                 map.put("description", this.description);
                 map.put("createdAt", this.createdAt);
                 map.put("coordinates", this.coordinates);
-
-                if(!this.id.isEmpty()){
-                        map.put("id", this.id);
-                }
 
                 return map;
         }
@@ -64,10 +64,11 @@ public class Localizacao implements Serializable {
 
         @Override
         public String toString() {
-                return "Localizacao {" +
-                        "\ndescription='" + description + '\'' +
-                        ", \ncreatedAt=" + createdAt +
-                        ", \ncoordinates=" + coordinates +
-                        "}\n";
+                return "Localizacao{" +
+                        "id='" + id + '\'' +
+                        ", description='" + description + '\'' +
+                        ", createdAt=" + createdAt +
+                        ", coordinates=" + coordinates +
+                        '}';
         }
 }

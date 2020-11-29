@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
 import br.usjt.locsaver.R;
-import br.usjt.locsaver.config.ConfiguracoesFirebase;
 import br.usjt.locsaver.helper.UsuarioFirebase;
 import br.usjt.locsaver.model.Usuario;
 
@@ -66,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void logarUsuario( Usuario usuario ){
 
-        autenticacao = ConfiguracoesFirebase.getFirebaseAutenticacao();
+        autenticacao = FirebaseAuth.getInstance();
         autenticacao.signInWithEmailAndPassword(
                 usuario.getEmail(), usuario.getSenha()
         ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
